@@ -1,29 +1,82 @@
-package converter
+package main
 
-import "strings"
+import (
+	"fmt"
+	"github.com/urfave/cli/v2"
+	"github.com/wangyuqi0706/clash-proxy-converter/converter"
+	"gopkg.in/yaml.v2"
+	"io/ioutil"
+	"os"
+	"path/filepath"
+	"strings"
+)
 
-func ConvertToMap(uris []string) []*Proxy {
-	var proxies []*Proxy
-	for _, uri := range uris {
-		prefix, _, ok := strings.Cut(uri, "://")
-		if !ok {
-			continue
-		}
-		switch prefix {
-		case "vmess":
-			v, err := NewVmessURI(uri)
-			if err != nil {
-				continue
+func main() {
+	var inputFile string
+	var outPath string
+	outPath, _ = os.Getwd()
+	app := &cli.App{
+		Name:      "converter",
+		Usage:     "convert vmess or ss link to clash config",
+		ArgsUsage: "your_subscribe_links",
+		Action: func(c *cli.Context) error {
+			fmt.Println("Hello friend!")
+			var uris []string
+			if c.IsSet("input") {
+				bytes, err := ioutil.ReadFile(inputFile)
+				fileText := string(bytes)
+				if err != nil {
+					return err
+				}
+				uris = strings.Fields(fileText)
 			}
-			proxies = append(proxies, v.ToClashProxy())
-		case "ss":
-			s, err := NewSsURI(uri)
+			m := converter.Convert(uris)
+			bytes, err := yaml.Marshal(m)
 			if err != nil {
-				continue
+				return err
 			}
-			proxies = append(proxies, s.ToClashProxy())
-		}
+			wd, err := os.Getwd()
+			if err != nil {
+				return err
+			}
 
+			if !c.IsSet("output") {
+				outPath = "config.yaml"
+			}
+
+			err = ioutil.WriteFile(filepath.Join(wd, outPath), bytes, 0644)
+			if err != nil {
+				return err
+			}
+			return nil
+		},
+
+		Flags: []cli.Flag{
+			&cli.StringFlag{
+				Name:        "input",
+				Aliases:     []string{"i"},
+				Usage:       "Load links from `FILE`",
+				Destination: &inputFile,
+			},
+			&cli.StringFlag{
+				Name:        "output",
+				Aliases:     []string{"o"},
+				Usage:       "",
+				EnvVars:     nil,
+				FilePath:    "",
+				Required:    false,
+				Hidden:      false,
+				TakesFile:   false,
+				Value:       "",
+				DefaultText: "",
+				Destination: &outPath,
+				HasBeenSet:  false,
+			},
+		},
 	}
-	return proxies
+
+	err := app.Run(os.Args)
+	if err != nil {
+		return
+	}
 }

@@ -52,15 +52,18 @@ func (v *VmessURI) Unmarshal(vmessURI string) error {
 
 func (v *VmessURI) ToClashProxy() *Proxy {
 	return &Proxy{
-		Name:     v.Ps,
-		Type:     "vmess",
-		Server:   v.Add,
-		Port:     v.Port,
-		Cipher:   "auto",
-		Password: "",
-		UDP:      false,
-		Network:  v.Net,
-		AlterId:  0,
-		UUID:     v.Id,
+		Name:           v.Ps,
+		Type:           "vmess",
+		Server:         v.Add,
+		Port:           v.Port,
+		UUID:           v.Id,
+		AlterId:        v.Aid,
+		Cipher:         "auto",
+		Password:       "",
+		UDP:            false,
+		TLS:            false,
+		SkipCertVerify: true,
+		ServerName:     "",
+		Network:        v.Net,
 	}
 }
