@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/url"
+	"strconv"
 	"strings"
 )
 
@@ -13,7 +14,7 @@ type SsURI struct {
 	Method   string
 	Password string
 	Addr     string
-	Port     string
+	Port     int
 	Name     string
 }
 
@@ -42,11 +43,12 @@ func (s *SsURI) Unmarshal(ssURI string) error {
 	mp := string(data)
 	meth, pass, _ := strings.Cut(mp, ":")
 	name, _ := url.QueryUnescape(fields[3])
+	port, _ := strconv.Atoi(fields[2])
 	*s = SsURI{
 		Method:   meth,
 		Password: pass,
 		Addr:     fields[1],
-		Port:     fields[2],
+		Port:     port,
 		Name:     name,
 	}
 	return nil

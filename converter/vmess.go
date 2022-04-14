@@ -12,7 +12,7 @@ type VmessURI struct {
 	V    string `json:"v"`
 	Ps   string `json:"ps"`
 	Add  string `json:"add"`
-	Port string `json:"port"`
+	Port int    `json:"port"`
 	Id   string `json:"id"`
 	Aid  string `json:"aid"`
 	Scy  string `json:"scy"`
@@ -60,7 +60,7 @@ func (v *VmessURI) ToClashProxy() *Proxy {
 		AlterId:        v.Aid,
 		Cipher:         "auto",
 		Password:       "",
-		UDP:            false,
+		UDP:            true,
 		TLS:            false,
 		SkipCertVerify: true,
 		ServerName:     "",
