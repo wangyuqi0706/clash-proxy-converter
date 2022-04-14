@@ -15,6 +15,6 @@ Run the tool in terminal
 ./converter -i links.txt
 ```
 
-You will find a `config.yaml` in the same directory.It contains `proxies` section.
+You will find a `config.yaml` in the same directory.It only contains `proxies` section.
 
 You need to add other sections. See [Clash Document](https://lancellc.gitbook.io/clash/clash-config-file/an-example-configuration-file)

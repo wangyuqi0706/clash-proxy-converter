@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"strings"
 )
 
@@ -12,7 +13,7 @@ type VmessURI struct {
 	V    string `json:"v"`
 	Ps   string `json:"ps"`
 	Add  string `json:"add"`
-	Port int    `json:"port"`
+	Port string `json:"port"`
 	Id   string `json:"id"`
 	Aid  string `json:"aid"`
 	Scy  string `json:"scy"`
@@ -51,11 +52,13 @@ func (v *VmessURI) Unmarshal(vmessURI string) error {
 }
 
 func (v *VmessURI) ToClashProxy() *Proxy {
+	port, _ := strconv.Atoi(v.Port)
+
 	return &Proxy{
 		Name:           v.Ps,
 		Type:           "vmess",
 		Server:         v.Add,
-		Port:           v.Port,
+		Port:           port,
 		UUID:           v.Id,
 		AlterId:        v.Aid,
 		Cipher:         "auto",

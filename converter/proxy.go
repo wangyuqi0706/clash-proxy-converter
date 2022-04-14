@@ -1,7 +1,7 @@
 package converter
 
 import (
-	"github.com/fatih/structs"
+	"gopkg.in/yaml.v2"
 )
 
 type Proxy struct {
@@ -12,7 +12,7 @@ type Proxy struct {
 	UUID           string `yaml:"uuid,omitempty"`
 	AlterId        string `yaml:"alterId"`
 	Cipher         string `yaml:"cipher"`
-	Password       string `yaml:"password"`
+	Password       string `yaml:"password,omitempty"`
 	UDP            bool   `yaml:"udp"`
 	TLS            bool   `yaml:"tls,omitempty"`
 	SkipCertVerify bool   `yaml:"skip-cert-verify,omitempty"`
@@ -21,5 +21,8 @@ type Proxy struct {
 }
 
 func (p *Proxy) ToMap() map[string]any {
-	return structs.Map(p)
+	data, _ := yaml.Marshal(p)
+	var m map[string]any
+	_ = yaml.Unmarshal(data, &m)
+	return m
 }
