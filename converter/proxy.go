@@ -10,7 +10,7 @@ type Proxy struct {
 	Server         string `yaml:"server"`
 	Port           int    `yaml:"port"`
 	UUID           string `yaml:"uuid,omitempty"`
-	AlterId        string `yaml:"alterId"`
+	AlterId        string `yaml:"alterId,omitempty"`
 	Cipher         string `yaml:"cipher"`
 	Password       string `yaml:"password,omitempty"`
 	UDP            bool   `yaml:"udp"`
