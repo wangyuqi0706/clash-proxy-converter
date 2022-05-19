@@ -64,7 +64,7 @@ func (s *SsURI) ToClashProxy() *Proxy {
 		Password: s.Password,
 		UDP:      true,
 		Network:  "",
-		AlterId:  "0",
+		AlterId:  "",
 		UUID:     "",
 	}
 }
